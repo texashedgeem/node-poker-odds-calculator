@@ -2,7 +2,6 @@
   "version": 2,
   "functions": {
     "api/odds.ts": {
-      "runtime": "nodejs18.x",
       "maxDuration": 10
     }
   }
