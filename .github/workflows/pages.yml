@@ -47,8 +47,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
-          bundler-cache: true
-          working-directory: docs
+
+      - name: Install Jekyll
+        run: bundle install
+        working-directory: docs
 
       - name: Build Jekyll
         run: bundle exec jekyll build --destination ../_site
