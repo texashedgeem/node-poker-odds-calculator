@@ -1,0 +1,31 @@
+---
+layout: default
+title: API Documentation
+---
+
+<link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+<style>
+  /* Integrate Swagger UI with site styles */
+  #swagger-ui .swagger-ui .topbar { display: none; }
+  #swagger-ui .swagger-ui .info { margin: 0 0 24px; }
+  #swagger-ui .swagger-ui .info .title { font-size: 1.4rem; }
+  #swagger-ui .swagger-ui .scheme-container { background: transparent; box-shadow: none; padding: 0; }
+  #swagger-ui { margin-top: 8px; }
+</style>
+
+<div id="swagger-ui"></div>
+
+<script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+<script>
+  SwaggerUIBundle({
+    url: "{{ site.baseurl }}/openapi.yaml",
+    dom_id: '#swagger-ui',
+    presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
+    layout: "BaseLayout",
+    deepLinking: true,
+    tryItOutEnabled: true,
+    displayRequestDuration: true,
+    defaultModelsExpandDepth: 1,
+    defaultModelExpandDepth: 2,
+  });
+</script>

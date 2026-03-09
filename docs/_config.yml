@@ -1,0 +1,7 @@
+title: Poker Odds Calculator
+description: A pre-flop and post-flop REST API odds calculator for Texas Hold'em
+baseurl: "/node-poker-odds-calculator"
+url: "https://texashedgeem.github.io"
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <meta name="description" content="{{ site.description }}">
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css">
+  {% seo %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a>
+      <nav class="site-nav">
+        <a href="{{ site.baseurl }}/" {% if page.url == '/' or page.url == '/index.html' %}class="active"{% endif %}>Home</a>
+        <a href="{{ site.baseurl }}/api" {% if page.url contains 'api' %}class="active"{% endif %}>API Docs</a>
+        <a href="{{ site.baseurl }}/releases" {% if page.url contains 'releases' %}class="active"{% endif %}>Release Notes</a>
+        <a href="https://github.com/texashedgeem/node-poker-odds-calculator" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      {{ content }}
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        <a href="https://github.com/texashedgeem/node-poker-odds-calculator" target="_blank" rel="noopener">GitHub</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://node-poker-odds-calculator.vercel.app/api/odds" target="_blank" rel="noopener">Live API</a>
+        &nbsp;&middot;&nbsp;
+        MIT License
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

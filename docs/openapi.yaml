@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: Poker Odds Calculator API
+  version: "1.0.0"
+  description: |
+    REST API for calculating Texas Hold'em hand equities.
+
+    Given 2–10 player hands and an optional board, returns each player's
+    win equity and tie percentage across all possible remaining cards.
+
+    **Card notation:** rank (`A K Q J T 9 8 7 6 5 4 3 2`) + suit (`s h d c`)
+    e.g. `AsKh` = Ace of Spades, King of Hearts.
+
+    **Board:** 0 cards (pre-flop), 3 cards (flop), 4 cards (turn), or 5 cards (river).
+  contact:
+    url: https://github.com/texashedgeem/node-poker-odds-calculator
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://node-poker-odds-calculator.vercel.app
+    description: Production (Vercel)
+
+paths:
+  /api/odds:
+    post:
+      summary: Calculate hand equities
+      description: |
+        Calculates win equity and tie percentage for each player.
+
+        - **Pre-flop (no board):** Monte Carlo simulation (default 100,000 iterations)
+        - **Flop (3 cards):** Exhaustive enumeration of all 2-card combinations
+        - **Turn (4 cards):** Exhaustive enumeration of all remaining river cards
+        - **River (5 cards):** Single deterministic evaluation
+      operationId: calculateOdds
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OddsRequest'
+            examples:
+              preflop_2player:
+                summary: Pre-flop, 2 players
+                value:
+                  players: ["AsAc", "KsKc"]
+                  iterations: 10000
+              preflop_ties:
+                summary: Pre-flop, identical pairs (tie scenario)
+                value:
+                  players: ["AsAc", "AhAd", "KsKc"]
+                  iterations: 10000
+              flop:
+                summary: Post-flop, 3 players
+                value:
+                  players: ["6s5s", "6h5h", "8h8d"]
+                  board: "4s7s8c"
+              short_deck:
+                summary: Short Deck variant
+                value:
+                  players: ["AcAh", "JdTd"]
+                  game: "short"
+                  iterations: 10000
+      responses:
+        "200":
+          description: Equity calculation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OddsResponse'
+              example:
+                players:
+                  - cards: "AsAc"
+                    equity: 2
+                    tiePercentage: 76
+                  - cards: "AhAd"
+                    equity: 2
+                    tiePercentage: 76
+                  - cards: "KsKc"
+                    equity: 20
+                    tiePercentage: 1
+                iterations: 10000
+                elapsedTime: 0.375
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                duplicate_cards:
+                  summary: Duplicate cards
+                  value:
+                    error: "Detected duplicate cards"
+                invalid_board:
+                  summary: Invalid board size
+                  value:
+                    error: "The board must contain 0, 3, 4 or 5 cards"
+                invalid_card:
+                  summary: Invalid card string
+                  value:
+                    error: 'players[1] ("ZZxx"): Invalid card rank: z'
+        "405":
+          description: Method not allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                error: "Method not allowed. Use POST."
+
+components:
+  schemas:
+    OddsRequest:
+      type: object
+      required:
+        - players
+      properties:
+        players:
+          type: array
+          description: Array of player hands as card strings. Each string is 2–10 chars (pairs of rank+suit).
+          minItems: 2
+          maxItems: 10
+          items:
+            type: string
+            pattern: "^[AKQJTakqjt2-9][shdcSHDC]{1,}$"
+            example: "AsKh"
+          example: ["AsAc", "AhAd", "KsKc"]
+        board:
+          type: string
+          description: |
+            Community cards as a space/comma-separated or concatenated string.
+            Must represent 3 (flop), 4 (turn), or 5 (river) cards. Omit for pre-flop.
+          example: "4s7s8c"
+        game:
+          type: string
+          description: Game variant. `short` uses only ranks 6–A and flush beats full house.
+          enum: [full, short]
+          default: full
+        iterations:
+          type: integer
+          description: Number of Monte Carlo iterations for pre-flop simulation. Ignored for post-flop (exhaustive).
+          minimum: 1
+          maximum: 100000
+          default: 100000
+
+    OddsResponse:
+      type: object
+      properties:
+        players:
+          type: array
+          description: Results in the same order as the input players array.
+          items:
+            type: object
+            properties:
+              cards:
+                type: string
+                description: The original card string for this player.
+                example: "AsAc"
+              equity:
+                type: number
+                description: Win equity as a percentage (0–100).
+                example: 2
+              tiePercentage:
+                type: number
+                description: Tie percentage (0–100). Included in equity.
+                example: 76
+        iterations:
+          type: integer
+          description: Number of iterations actually used (exhaustive scenarios return exact count).
+          example: 10000
+        elapsedTime:
+          type: number
+          description: Server-side calculation time in seconds.
+          example: 0.375
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Human-readable error message.
