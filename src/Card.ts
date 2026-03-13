@@ -50,7 +50,7 @@ export class Rank {
   public static KING: number = 13;
   public static ACE: number = 14;
 
-  public static names: ICardName[] = [
+  public static names: (ICardName | null)[] = [
     null,
     null,
     { singular: 'deuce', plural: 'deuces' },

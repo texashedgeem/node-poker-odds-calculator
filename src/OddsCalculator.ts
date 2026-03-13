@@ -55,7 +55,7 @@ export class HandEquity {
 export class OddsCalculator {
   public static DEFAULT_ITERATIONS: number = 100000;
   public equities: HandEquity[];
-  protected odds: number[];
+  protected odds!: number[];
   protected handranks: HandRank[];
   protected iterations: number;
   protected elapsedTime: number;
@@ -155,7 +155,7 @@ export class OddsCalculator {
     });
 
     const selectWinners: Function = (simulatedBoard: CardGroup): void => {
-      let highestRanking: HandRank = null;
+      let highestRanking: HandRank | null = null;
       let highestRankingIndex: number[] = [];
       for (let i: number = 0; i < cardgroups.length; i += 1) {
         const handranking: HandRank = HandRank.evaluate(
