@@ -60,8 +60,8 @@ export default function handler(req: VercelRequest, res: VercelResponse): void {
   for (let i = 0; i < body.players.length; i++) {
     try {
       cardGroups.push(CardGroup.fromString(body.players[i]));
-    } catch (e: any) {
-      res.status(400).json({ error: `players[${i}] ("${body.players[i]}"): ${e.message}` });
+    } catch (e) {
+      res.status(400).json({ error: `players[${i}] ("${body.players[i]}"): ${(e as any).message}` });
       return;
     }
   }
@@ -74,8 +74,8 @@ export default function handler(req: VercelRequest, res: VercelResponse): void {
     }
     try {
       board = CardGroup.fromString(body.board);
-    } catch (e: any) {
-      res.status(400).json({ error: `board ("${body.board}"): ${e.message}` });
+    } catch (e) {
+      res.status(400).json({ error: `board ("${body.board}"): ${(e as any).message}` });
       return;
     }
   }
@@ -83,8 +83,8 @@ export default function handler(req: VercelRequest, res: VercelResponse): void {
   let result: OddsCalculator;
   try {
     result = OddsCalculator.calculate(cardGroups, board, game, iterations);
-  } catch (e: any) {
-    res.status(400).json({ error: e.message });
+  } catch (e) {
+    res.status(400).json({ error: (e as any).message });
     return;
   }
 
