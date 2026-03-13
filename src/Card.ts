@@ -131,10 +131,11 @@ export class Card {
 
   public toString(suit: boolean = true, full?: boolean, plural?: boolean): string {
     if (full) {
+      const name = Rank.names[this.rank];
       if (plural) {
-        return Rank.names[this.rank].plural;
+        return name ? name.plural : `${this.rank}`;
       }
-      return Rank.names[this.rank].singular;
+      return name ? name.singular : `${this.rank}`;
     }
 
     let s: string = `${this.rank}`;
