@@ -1,0 +1,77 @@
+---
+title: Quickstart
+description: Make your first API call in under a minute.
+---
+
+## Pre-flop: Aces vs Kings
+
+The classic matchup. Send a POST request to `/api/odds`:
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://node-poker-odds-calculator.vercel.app/api/odds \
+  -H "Content-Type: application/json" \
+  -d '{"players": ["AsAc", "KsKc"]}'
+```
+
+```javascript JavaScript
+const res = await fetch('https://node-poker-odds-calculator.vercel.app/api/odds', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ players: ['AsAc', 'KsKc'] })
+});
+const data = await res.json();
+console.log(data);
+```
+
+```python Python
+import requests
+
+data = requests.post(
+    'https://node-poker-odds-calculator.vercel.app/api/odds',
+    json={'players': ['AsAc', 'KsKc']}
+).json()
+print(data)
+```
+
+</CodeGroup>
+
+**Response:**
+
+```json
+{
+  "players": [
+    { "cards": "AsAc", "equity": 81.2, "tiePercentage": 0.4 },
+    { "cards": "KsKc", "equity": 18.4, "tiePercentage": 0.4 }
+  ],
+  "iterations": 100000,
+  "elapsedTime": 0.412
+}
+```
+
+## Post-flop with a board
+
+Pass the community cards as a concatenated string:
+
+```bash
+curl -X POST https://node-poker-odds-calculator.vercel.app/api/odds \
+  -H "Content-Type: application/json" \
+  -d '{"players": ["6s5s", "8h8d"], "board": "4s7s8c"}'
+```
+
+## Short Deck variant
+
+Set `"game": "short"` for Short Deck (6+ Hold'em), where ranks 2–5 are removed and a flush beats a full house:
+
+```bash
+curl -X POST https://node-poker-odds-calculator.vercel.app/api/odds \
+  -H "Content-Type: application/json" \
+  -d '{"players": ["AcAh", "JdTd"], "game": "short", "iterations": 10000}'
+```
+
+## Next steps
+
+<Card title="API Reference" icon="code" href="/api-reference/calculate-odds">
+  See all parameters, validation rules, and error responses
+</Card>

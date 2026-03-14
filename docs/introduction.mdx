@@ -1,0 +1,44 @@
+---
+title: Introduction
+description: A free REST API for calculating Texas Hold'em poker hand equities.
+---
+
+## What is this?
+
+The Poker Odds API calculates win equity and tie percentages for 2–10 Texas Hold'em hands. Give it a set of player hands and an optional board, and it returns each player's chances of winning.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="bolt" href="/quickstart">
+    Make your first API call in under a minute
+  </Card>
+  <Card title="API Reference" icon="code" href="/api-reference/calculate-odds">
+    Full endpoint documentation with live playground
+  </Card>
+</CardGroup>
+
+## How it works
+
+| Stage | Board cards | Method |
+|---|---|---|
+| Pre-flop | 0 | Monte Carlo simulation (up to 100,000 iterations) |
+| Flop | 3 | Exhaustive enumeration |
+| Turn | 4 | Exhaustive enumeration |
+| River | 5 | Single deterministic evaluation |
+
+## Card notation
+
+Cards are written as **rank + suit** with no spaces:
+
+| Ranks | Suits |
+|---|---|
+| `A K Q J T 9 8 7 6 5 4 3 2` | `s` (spades) `h` (hearts) `d` (diamonds) `c` (clubs) |
+
+**Examples:** `AsKh` = Ace of Spades + King of Hearts, `2c2d` = Two of Clubs + Two of Diamonds
+
+A hand is two cards concatenated: `AsKh`, `2c2d`, `TsTd`
+
+## Base URL
+
+```
+https://node-poker-odds-calculator.vercel.app
+```

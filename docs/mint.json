@@ -1,0 +1,24 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Poker Odds API",
+  "colors": {
+    "primary": "#16a34a",
+    "light": "#22c55e",
+    "dark": "#15803d"
+  },
+  "favicon": "/favicon.png",
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": ["introduction", "quickstart"]
+    },
+    {
+      "group": "API Reference",
+      "pages": ["api-reference/calculate-odds"]
+    }
+  ],
+  "openapi": "openapi.yaml",
+  "footerSocials": {
+    "github": "https://github.com/texashedgeem/node-poker-odds-calculator"
+  }
+}
