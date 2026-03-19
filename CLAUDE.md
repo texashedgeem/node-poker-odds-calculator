@@ -59,3 +59,4 @@ Last known state: Vercel API clean, docs.qeetoto.com live, hedgeem.qeetoto.com l
 - Show Jira preview before creating/updating tickets
 - Add Jira comments at: start of work, description enhancement, Done transition
 - Never delete descriptions — only update or append
+- Before closing any ticket: ask Simon if he wants to test first; capture response/evidence as a Jira comment before transitioning to Done
